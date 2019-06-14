@@ -65,7 +65,7 @@ L.control.layers(null, overlayLayers).addTo(map);
 
 // Define Functions
 function addCounties(){
-    $.ajax("assets/data/WICounties.geojson", {
+    $.ajax("assets/data/WICounties.topojson", {
         dataType: "json",
         success: createCountyLayer
     });
@@ -78,7 +78,7 @@ function createCountyLayer(response, status, jqXHRobject){
 
 // Rename all functions and variables
 function addCensusTracts(){
-    $.ajax("assets/data/WICensusTracts.geojson", {
+    $.ajax("assets/data/WICensusTracts.topojson", {
         dataType: "json",
         success: createCensusLayer
     });
@@ -93,7 +93,7 @@ function createCensusLayer(response, status, jqXHRobject){
 
 // Define Functions
 function addWellSites(){
-    $.ajax("assets/data/WellSites.geojson", {
+    $.ajax("assets/data/WellSites.topojson", {
         dataType: "json",
         success: createWellSitesLayer
     });
