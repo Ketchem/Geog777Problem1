@@ -13,6 +13,7 @@ var map = L.map('map', {
     zoom: 7
 });
 
+// Layer Styles
 var wellSitesStyle = {
     radius: 4,
     fillColor: "#ff7800",
@@ -22,8 +23,39 @@ var wellSitesStyle = {
     fillOpacity: 0.8
 };
 
+// Map Features
 var wellPoints;
 var censusTracts;
+var nitrateLevels;
+
+// Map Layers
+var wellLayer = L.geoJSON(null, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, wellSitesStyle);
+    }
+}).addTo(map);
+var censusLayer = L.geoJSON(null, {style:styleTracts}).addTo(map);
+var countiesLayer = L.geoJSON().addTo(map);
+var nitrateLayer = L.geoJSON(null, {style:styleInterpolation});
+// var cancerRates = L.geoJSON(null, {style:styleCancer});
+
+
+// HTML Elements
+var exponentInput = document.getElementById("exponent");
+var cellSizeInput = document.getElementById("cellSize");
+var interpolateButton = document.getElementById("interpolate");
+var removeInterpolateButton = document.getElementById("removeInterpolate");
+var cancerRateButton = document.getElementById("cancerRate");
+var removeCancerButton = document.getElementById("removeCancer");
+var loader = document.getElementById("loader");
+
+loader.hidden = true;
+
+// User Editable Variables
+var exponent = 1;
+var cellSize = 5;
+
+
 // END DEFINE GLOBAL VARIABLES
 // --------------------------------------------------------------------------
 
@@ -31,25 +63,6 @@ var censusTracts;
 // BUILD MAP
 // add the mapbox tiles to the map object
 map.addLayer(mapboxTiles);
-
-var exponent = 1;
-var cellSize = 3;
-var exponentInput = document.getElementById("exponentInput");
-var interpolateButton = document.getElementById("interpolate");
-var removeInterpolateButton = document.getElementById("removeInterpolate");
-
-var cancerRateButton = document.getElementById("cancerRate");
-var removeCancerButton = document.getElementById("removeCancer");
-
-var wellLayer = L.geoJSON(null, {
-        pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, wellSitesStyle);
-        }
-    }).addTo(map);
-var censusLayer = L.geoJSON(null, {style:styleTracts}).addTo(map);
-var countiesLayer = L.geoJSON().addTo(map);
-var rates = L.geoJSON(null, {style:styleInterpolation});
-var cancerRates = L.geoJSON(null, {style:styleCancer});
 
 
 // addLayers(layers);
@@ -80,28 +93,41 @@ exponentInput.addEventListener("change", function(){
     exponent = Number(exponentInput.value);
 });
 
+cellSizeInput.addEventListener("change", function(){
+    cellSize = Number(cellSizeInput.value);
+});
+
 interpolateButton.addEventListener("click", function(){
-    createInterpolation(wellPoints);
+    loader.hidden = false;
+    $.ajax({
+        success:function(){
+            createInterpolation(wellPoints);
+            nitrateLayer.addTo(map);
+            loader.hidden = true;
+        }
+    });
+
 });
 
 removeInterpolateButton.addEventListener("click",function(){
-   map.removeLayer(rates);
+   map.removeLayer(nitrateLayer);
 });
 
 cancerRateButton.addEventListener("click", function(){
-    createCancerLayer(censusTracts);
+    // createCancerLayer(censusTracts);
 });
 
 removeCancerButton.addEventListener("click",function(){
-    map.removeLayer(cancerRates);
+    // map.removeLayer(cancerRates);
 });
 
-map.on('click', function(e){
-    var coord = e.latlng;
-    var lat = coord.lat;
-    var lng = coord.lng;
-    console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-});
+// Log the coordinates of a mouse click
+// map.on('click', function(e){
+//     var coord = e.latlng;
+//     var lat = coord.lat;
+//     var lng = coord.lng;
+//     console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+// });
 
 // --------------------------------------------------------------------------
 
@@ -164,21 +190,21 @@ function createWellSitesLayer(response, status, jqXHRobject){
 
 
 function createInterpolation(wellPoints){
-
-    map.removeLayer(rates);
-    rates.clearLayers();
+    // map.removeLayer(nitrateLayer);
+    nitrateLayer.clearLayers();
 
     // var options = {gridType: 'hex', property: 'nitr_ran', units: 'miles', weight: exponent};
     // var grid = turf.interpolate(wellPoints, 5, options);
 
     var options = {gridType: 'hex', property: 'nitr_ran', units: 'miles', weight: exponent};
-    var grid = turf.interpolate(wellPoints, cellSize, options);
+    nitrateLevels = turf.interpolate(wellPoints, cellSize, options);
 
-    console.log(grid);
+    // console.log(grid);
 
-    rates.addData(grid);
+    nitrateLayer.addData(nitrateLevels);
 
-    rates.addTo(map);
+    loader.hidden = true;
+    // nitrateLayer.addTo(map);
 
     // collectPoints(grid);
     // rates.bringToBack(map);

@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
         <link rel="stylesheet" href="assets/css/main.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
     </head>
     <body>
@@ -20,17 +21,25 @@
                         <h4>Toolbox</h4>
                     </div>
                     <div class="row">
-                        <input type="number" value="1" id="exponentInput" min="1"/>
+                        <input type="number" value="1" id="exponent" min="1"/>
+                        <input type="number" value="5" id="cellSize" min="1"/>
                     </div>
                     <div class="row">
-                        <button disabled id="interpolate">Interpolate</button>
+                        <!--<button disabled id="interpolate">Interpolate</button>-->
+                        <button id = "interpolate" class="buttonload">
+                            <i id = "loader" class="fa fa-circle-o-notch fa-spin"></i> Interpolate
+                        </button>
                         <button id="removeInterpolate">Remove</button>
                     </div>
 
                     <div class="row">
-                        <button disabled id="cancerRate">Interpolate</button>
-                        <button id="removeCancer">Remove</button>
+                        <button disabled id="calculate">Calculate Regression</button>
+                        <!--<button id="removeCancer">Remove</button>-->
                     </div>
+
+                    <!--<div class="row">-->
+                        <!--<div class="loader" id="loader"></div>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="col-md-9 float-right" id="mapContainer">
