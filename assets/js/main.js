@@ -23,10 +23,16 @@ var wellSitesStyle = {
     fillOpacity: 0.8
 };
 
+var countyStyle = {
+    fill: false,
+    stroke: "#000"
+};
+
 // Map Features
 var wellPoints;
 var censusTracts;
 var nitrateLevels;
+var errors;
 
 // Map Layers
 var wellLayer = L.geoJSON(null, {
@@ -35,8 +41,9 @@ var wellLayer = L.geoJSON(null, {
     }
 }).addTo(map);
 var censusLayer = L.geoJSON(null, {style:styleTracts}).addTo(map);
-var countiesLayer = L.geoJSON().addTo(map);
+var countiesLayer = L.geoJSON(null, {style:countyStyle}).addTo(map);
 var nitrateLayer = L.geoJSON(null, {style:styleInterpolation});
+var errorLayer = L.geoJSON(null, {style:styleError});
 // var cancerRates = L.geoJSON(null, {style:styleCancer});
 
 
@@ -45,16 +52,28 @@ var exponentInput = document.getElementById("exponent");
 var cellSizeInput = document.getElementById("cellSize");
 var interpolateButton = document.getElementById("interpolate");
 var removeInterpolateButton = document.getElementById("removeInterpolate");
-var cancerRateButton = document.getElementById("cancerRate");
-var removeCancerButton = document.getElementById("removeCancer");
+var calculateButton = document.getElementById("calculate");
 var loader = document.getElementById("loader");
+var regressionLoader = document.getElementById("regressionLoader");
+var results = document.getElementById("results");
+var slopeDisplay = document.getElementById("slope");
+var intersectDisplay = document.getElementById("intersect");
+var errorLoader = document.getElementById("errorLoader");
+var errorButton = document.getElementById("errorButton");
+
 
 loader.hidden = true;
+regressionLoader.hidden = true;
+errorLoader.hidden = true;
+interpolateButton.disabled = true;
+errorButton.disabled = true;
 
 // User Editable Variables
 var exponent = 1;
 var cellSize = 5;
 
+// Calculated Values
+var regressionEq;
 
 // END DEFINE GLOBAL VARIABLES
 // --------------------------------------------------------------------------
@@ -104,31 +123,40 @@ interpolateButton.addEventListener("click", function(){
             createInterpolation(wellPoints);
             nitrateLayer.addTo(map);
             loader.hidden = true;
+            calculateButton.disabled = false;
         }
     });
-
 });
 
 removeInterpolateButton.addEventListener("click",function(){
    map.removeLayer(nitrateLayer);
 });
 
-cancerRateButton.addEventListener("click", function(){
-    // createCancerLayer(censusTracts);
+calculateButton.addEventListener("click", function(){
+    regressionLoader.hidden = false;
+    $.ajax({
+        success:function(){
+            regressionEq = calculateRegression();
+            regressionLoader.hidden = true;
+            results.hidden = false;
+            slopeDisplay.innerText = Number(regressionEq.m).toFixed(2);
+            intersectDisplay.innerText = Number(regressionEq.b).toFixed(2);
+            errorButton.disabled = false;
+        }
+    });
 });
 
-removeCancerButton.addEventListener("click",function(){
-    // map.removeLayer(cancerRates);
+errorButton.addEventListener("click", function(){
+    errorLoader.hidden = false;
+    $.ajax({
+        success:function(){
+            calculateError();
+            errorLayer.addTo(map);
+            errorLoader.hidden = true;
+        }
+    });
+
 });
-
-// Log the coordinates of a mouse click
-// map.on('click', function(e){
-//     var coord = e.latlng;
-//     var lat = coord.lat;
-//     var lng = coord.lng;
-//     console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-// });
-
 // --------------------------------------------------------------------------
 
 
@@ -160,7 +188,7 @@ function createCensusLayer(response, status, jqXHRobject){
     censusLayer.addData(response)
     censusLayer.bringToBack(map);
 
-    cancerRateButton.disabled = false;
+
 };
 
 
@@ -181,6 +209,7 @@ function createWellSitesLayer(response, status, jqXHRobject){
         }
     });
     wellLayer.bringToFront(map);
+
 
     // Make the interpolation button active
     interpolateButton.disabled = false;
@@ -247,80 +276,89 @@ function styleTracts(feature) {
         dashArray: '3',
         fillOpacity: 0.7
     };
-}
+};
 
-
-
-function getCancerColor(d) {
-    return d > .8 ? '#993404' :
-        d > .6  ? '#d95f0e' :
-            d > .4  ? '#fe9929' :
-                d > .2  ? '#fed98e' :
-                    '#ffffd4';
-}
-
-function styleCancer(feature) {
+function styleError(feature){
     return {
-        fillColor: getCancerColor(feature.properties.canrate),
+        fillColor: getErrorsColor(feature.properties.errorLevel),
         weight: 2,
         opacity: 1,
         color: 'white',
         dashArray: '3',
         fillOpacity: 0.7
     };
+};
+
+function getErrorsColor(d){
+    return d > 12 ? '#49006a' :
+            d > 9  ? '#ae017e' :
+                d > 6  ? '#f768a1' :
+                    d > 3  ? '#fcc5c0' :
+                        '#fff7f3';
 }
 
-
-function createCancerLayer(censusTracts) {
-
-    testCancerInterpolate(censusTracts);
-    // map.removeLayer(cancerRates);
-    // cancerRates.clearLayers();
-    //
-    // var bbox = turf.bbox(wellPoints);
-    // console.log(bbox);
-    // var cellSide = 10;
-    // var options = {units: 'miles', properties:{canrate: 0}};
-    // var hexGrid = turf.hexGrid(bbox, cellSide, options);
-    //
-    // console.log(hexGrid);
-    //
-    // cancerRates.addData(hexGrid);
-    //
-    // cancerRates.addTo(map);
-};
-
-function collectPoints(grid){
-    var collected = turf.collect(censusTracts, grid, 'nitr_ran', 'canrate');
-    console.log(collected);
-};
-
-function testCancerInterpolate(censusTracts){
-    console.log("Test Intersect -----------------------------");
+function calculateRegression(){
+    // console.log("Calculate Regression Started");
 
     var tractCentroids = [];
+
     turf.featureEach(censusTracts, function(currentFeature, featureIndex){
         var centroid = turf.centroid(currentFeature);
         centroid.properties = {canrate:currentFeature.properties.canrate};
-        console.log(centroid, centroid.properties.canrate);
         tractCentroids.push(centroid);
     });
 
-    console.log(tractCentroids);
+    var collected = turf.collect(nitrateLevels, turf.featureCollection(tractCentroids), 'canrate', 'canrate');
 
-    var tractPoints = turf.featureCollection(tractCentroids);
+    var emptyBins = []
+    var bins = []
+    turf.featureEach(collected, function(currentFeature, featureindex){
+        if(currentFeature.properties.canrate.length > 0){
+            var sum = 0
+            for (var i = 0; i < currentFeature.properties.canrate.length; i++){
+                sum += currentFeature.properties.canrate[i];
+            }
+            var canRate = sum / currentFeature.properties.canrate.length
+
+            // currentFeature.properties.canrate = canRate;
+            bins.push([currentFeature.properties.nitr_ran, canRate]);
+        }
+        else {
+            emptyBins.push(currentFeature);
+        }
+    });
+
+    // console.log(bins);
+    console.log(ss.linearRegression(bins));
+    // console.log("Calculate Regression Finished");
+
+    return ss.linearRegression(bins);
+};
 
 
-    var options = {gridType: 'hex', property: 'canrate', units: 'miles', weight: exponent};
-    var grid = turf.interpolate(tractPoints, cellSize, options);
-    // Interpolate the points to a grid
+function calculateError(){
+    errors = censusTracts;
+    var min = 0, max = 0;
+    turf.featureEach(errors, function(currentFeature, featureindex) {
 
-    console.log(grid);
+        var canRate = Number(currentFeature.properties.canrate);
+        var nitrate = Number(currentFeature.properties.nitrate);
+        var calcNitrate = Number((regressionEq.m * canRate) + regressionEq.b).toFixed(2)
 
-    var canRates = L.geoJSON(grid, {style:styleCancer});
+        var error = calcNitrate - nitrate
 
-    canRates.addTo(map);
+        if (error < min) {
+            min = error;
+        }
+        if (error > max){
+            max = error;
+        }
 
-    console.log("Test Intersect End -------------------------");
+        currentFeature.properties.errorLevel = Math.abs(error);
+    });
 
+    // console.log(min);
+    // console.log(max);
+    errorLayer.addData(errors);
+    console.log(errors);
 };

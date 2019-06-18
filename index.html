@@ -33,13 +33,22 @@
                     </div>
 
                     <div class="row">
-                        <button disabled id="calculate">Calculate Regression</button>
+                        <button disabled id="calculate">
+                            <i id = "regressionLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Regression
+                        </button>
                         <!--<button id="removeCancer">Remove</button>-->
                     </div>
 
-                    <!--<div class="row">-->
-                        <!--<div class="loader" id="loader"></div>-->
-                    <!--</div>-->
+                    <div class="row" id = "results" hidden="true">
+                        <p>Slope: <span id="slope"></span></p>
+                        <p>Y-Intersect: <span id="intersect"></span></p>
+                    </div>
+
+                    <div class="row">
+                        <button id = "errorButton" class="buttonload">
+                            <i id = "errorLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Error
+                        </button>
+                    </div>
                 </div>
 
                 <div class="col-md-9 float-right" id="mapContainer">
@@ -53,6 +62,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" ></script>
         <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+        <script src='https://unpkg.com/simple-statistics@7.0.2/dist/simple-statistics.min.js'></script>
         <script type= "text/javascript" src = "assets/js/main.js"></script>
     </body>
 </html>
