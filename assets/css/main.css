@@ -1,3 +1,11 @@
+body{
+    background-color: #444444;
+}
+
+h1{
+    color: white;
+}
+
 #map{
     height: 80vh;
 }
@@ -14,4 +22,60 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.row{
+    /*border: 2px solid black;*/
+    text-align: center;
+}
+
+#exponent, #cellSize{
+    width: 75%;
+    margin-left: 13.5%;
+}
+
+.row label{
+    text-align: left;
+    width: 100%;
+    margin-left: 13.5%;
+    margin-bottom: 0;
+    margin-top: 10px;
+    color: white;
+}
+
+h5{
+    width: 100%;
+    /*border-bottom: 1px solid black;*/
+    /*align*/
+    /*background-color: pink;*/
+    color: white;
+}
+
+#interpolate{
+    margin-top: 10px;
+}
+
+
+.controls{
+    width: 75%;
+    margin-left: 13.5%;
+    margin-bottom: 20px;
+}
+
+#results{
+    width: 75%;
+    margin-left: 13.5%;
+    text-align: center;
+}
+
+#results p{
+    width: 100%;
+}
+
+#errorTitle{
+    margin-top: 20px;
+}
+
+#calculate, #errorButton{
+    margin-top: 10px;
 }
