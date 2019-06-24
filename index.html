@@ -3,9 +3,9 @@
         <title>Nitrates and Cancer</title>
         <script type= "text/javascript" src = "assets/js/lib/jquery-3.3.1.min.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
-        <link rel="stylesheet" href="assets/css/main.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="assets/css/main.css">
         
     </head>
     <body>
@@ -17,25 +17,35 @@
             </div>
             <div class="row">
                 <div class="col-md-3 float-left" id="panel">
-                    <div class="row" id="appInfo">
-                        <h4>Toolbox</h4>
-                    </div>
+                    <!--<div class="row" id="appInfo">-->
+                        <!--<h4>Toolbox</h4>-->
+                    <!--</div>-->
                     <div class="row">
+                        <h5>Interpolate</h5>
+                        <label for="exponent">IDW Exponent</label>
                         <input type="number" value="1" id="exponent" min="1"/>
+                        <label for="cellSize">Cell Size</label>
                         <input type="number" value="5" id="cellSize" min="1"/>
+                        <div class="controls">
+                            <button id = "interpolate" class="buttonload btn-primary btn-block">
+                                <i id = "loader" class="fa fa-circle-o-notch fa-spin"></i> Interpolate
+                            </button>
+                            <button id="removeInterpolate" class="btn-warning btn-block">Remove</button>
+                        </div>
                     </div>
-                    <div class="row">
-                        <!--<button disabled id="interpolate">Interpolate</button>-->
-                        <button id = "interpolate" class="buttonload">
-                            <i id = "loader" class="fa fa-circle-o-notch fa-spin"></i> Interpolate
-                        </button>
-                        <button id="removeInterpolate">Remove</button>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--&lt;!&ndash;<button disabled id="interpolate">Interpolate</button>&ndash;&gt;-->
+
+                    <!--</div>-->
 
                     <div class="row">
-                        <button disabled id="calculate">
-                            <i id = "regressionLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Regression
-                        </button>
+                        <h5>Regression</h5>
+                        <div class="controls">
+                            <button disabled id="calculate" class="btn btn-primary btn-block">
+                                <i id = "regressionLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Regression
+                            </button>
+                        </div>
+
                         <!--<button id="removeCancer">Remove</button>-->
                     </div>
 
@@ -45,9 +55,12 @@
                     </div>
 
                     <div class="row">
-                        <button id = "errorButton" class="buttonload">
-                            <i id = "errorLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Error
-                        </button>
+                        <h5 id="errorTitle">Error</h5>
+                        <div class="controls">
+                            <button disabled id = "errorButton" class="buttonload btn btn-primary btn-block">
+                                <i id = "errorLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Error
+                            </button>
+                        </div>
                     </div>
                 </div>
 
