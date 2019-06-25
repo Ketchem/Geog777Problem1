@@ -17,10 +17,10 @@ var map = L.map('map', {
     center: [45, -91.5],
     zoom: 7.2,
 });
-
-L.control.zoom({
-    position:'topright'
-}).addTo(map);
+//
+// L.control.zoom({
+//     position:'topright'
+// }).addTo(map);
 
 // Layer Styles
 var wellSitesStyle = {
