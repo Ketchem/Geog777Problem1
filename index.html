@@ -5,21 +5,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="assets/css/main.css">
 
 </head>
-<body>
-<div class="container">
-    <div class="row justify-content-center align-items-center">
-        <div class="title">
-            <h1>Nitrates and Cancer</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 float-left" id="panel">
-            <!--<div class="row" id="appInfo">-->
-            <!--<h4>Toolbox</h4>-->
-            <!--</div>-->
+    <body>
+
+        <div id="panel">
             <div class="row">
                 <h5>Interpolate</h5>
                 <label for="exponent">IDW Exponent</label>
@@ -27,16 +19,12 @@
                 <label for="cellSize">Cell Size</label>
                 <input type="number" value="5" id="cellSize" min="1"/>
                 <div class="controls">
-                    <button id = "interpolate" class="buttonload btn-primary btn-block">
+                    <button id = "interpolate" class="buttonload btn btn-primary btn-block">
                         <i id = "loader" class="fa fa-circle-o-notch fa-spin"></i> Interpolate
                     </button>
                     <button id="removeInterpolate" class="btn-warning btn-block">Remove</button>
                 </div>
             </div>
-            <!--<div class="row">-->
-            <!--&lt;!&ndash;<button disabled id="interpolate">Interpolate</button>&ndash;&gt;-->
-
-            <!--</div>-->
 
             <div class="row">
                 <h5>Regression</h5>
@@ -62,20 +50,23 @@
                     </button>
                 </div>
             </div>
+
         </div>
 
-        <div class="col-md-9 float-right" id="mapContainer">
-            <div class="card" id='map'></div>
-        </div>
-    </div>
-</div>
+        <div id="map">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" ></script>
-<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-<script src='https://unpkg.com/simple-statistics@7.0.2/dist/simple-statistics.min.js'></script>
-<script type= "text/javascript" src = "assets/js/main.js"></script>
-</body>
+        </div>
+
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" ></script>
+        <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+        <script src='https://unpkg.com/simple-statistics@7.0.2/dist/simple-statistics.min.js'></script>
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+        <script type= "text/javascript" src = "assets/js/main.js"></script>
+    </body>
 </html>
