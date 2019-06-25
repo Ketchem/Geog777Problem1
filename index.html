@@ -4,56 +4,60 @@
     <script type= "text/javascript" src = "assets/js/lib/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://kit.fontawesome.com/16a3dc2bcb.js"></script>
 
 </head>
     <body>
+        <div class="container">
 
-        <div id="panel">
-            <div class="row">
-                <h5>Interpolate</h5>
-                <label for="exponent">IDW Exponent</label>
-                <input type="number" value="1" id="exponent" min="1"/>
-                <label for="cellSize">Cell Size</label>
-                <input type="number" value="5" id="cellSize" min="1"/>
-                <div class="controls">
-                    <button id = "interpolate" class="buttonload btn btn-primary btn-block">
-                        <i id = "loader" class="fa fa-circle-o-notch fa-spin"></i> Interpolate
-                    </button>
-                    <button id="removeInterpolate" class="btn-warning btn btn-block">Remove</button>
+            <div id="panel">
+                <div class="row" id="title">
+                    <h2 id="titleText">Nitrates and Cancer</h2>
                 </div>
-            </div>
-
-            <div class="row">
-                <h5>Regression</h5>
-                <div class="controls">
-                    <button disabled id="calculate" class="btn btn-primary btn-block">
-                        <i id = "regressionLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Regression
-                    </button>
+                <div class="row">
+                    <h5>Interpolation <i id="interpolationTip" class="far fa-question-circle"></i></h5>
+                    <label for="exponent">IDW Exponent</label>
+                    <input type="number" value="1" id="exponent" min="1"/>
+                    <label for="cellSize">Cell Size</label>
+                    <input type="number" value="5" id="cellSize" min="1"/>
+                    <div class="controls">
+                        <button id = "interpolate" class="buttonload btn btn-primary btn-block">
+                            <i id = "loader" class="fa fa-circle-o-notch fa-spin"></i> Interpolate
+                        </button>
+                        <button id="removeInterpolate" class="btn-warning btn btn-block">Remove</button>
+                    </div>
                 </div>
 
-                <!--<button id="removeCancer">Remove</button>-->
-            </div>
+                <div class="row">
+                    <h5>Regression <i id="regressionTip" class="far fa-question-circle"></i></h5>
+                    <div class="controls">
+                        <button disabled id="calculate" class="btn btn-primary btn-block">
+                            <i id = "regressionLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Regression
+                        </button>
+                    </div>
 
-            <div class="row" id = "results" hidden="true">
-                <p>Slope: <span id="slope"></span></p>
-                <p>Y-Intersect: <span id="intersect"></span></p>
-            </div>
-
-            <div class="row">
-                <h5 id="errorTitle">Error</h5>
-                <div class="controls">
-                    <button disabled id = "errorButton" class="buttonload btn btn-primary btn-block">
-                        <i id = "errorLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Error
-                    </button>
+                    <!--<button id="removeCancer">Remove</button>-->
                 </div>
+
+                <div class="row" id = "results" hidden="true">
+                    <p>Slope: <span id="slope"></span></p>
+                    <p>Y-Intersect: <span id="intersect"></span></p>
+                </div>
+
+                <div class="row">
+                    <h5 id="errorTitle">Error <i id="errorTip" class="far fa-question-circle"></i></h5>
+                    <div class="controls">
+                        <button disabled id = "errorButton" class="buttonload btn btn-primary btn-block">
+                            <i id = "errorLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Error
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
-        </div>
-
-        <div id="map">
+            <div id="map"></div>
 
         </div>
 

@@ -13,10 +13,14 @@ var mapboxTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}
 
 // create the map object and set the center and zoom
 var map = L.map('map', {
-    center: [44.75, -89.65],
-    zoom: 7.2
+    zoomControl: false,
+    center: [45, -91.5],
+    zoom: 7.2,
 });
 
+L.control.zoom({
+    position:'topright'
+}).addTo(map);
 
 // Layer Styles
 var wellSitesStyle = {
@@ -160,6 +164,13 @@ errorButton.addEventListener("click", function(){
         }
     });
 
+});
+
+map.on('click', function(e){
+    var coord = e.latlng;
+    var lat = coord.lat;
+    var lng = coord.lng;
+    console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
 });
 // --------------------------------------------------------------------------
 
