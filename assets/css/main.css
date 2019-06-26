@@ -115,7 +115,18 @@ i{
     left: 0;
     z-index: 10;
     margin-top: 3em;
+}
 
+#\ panelBackground{
+    width: 25%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    /*margin-top: 3em;*/
+    background-color: white;
+    opacity: 0.15;
 }
 
 #map{
