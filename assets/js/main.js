@@ -69,8 +69,12 @@ var slopeDisplay = document.getElementById("slope");
 var intersectDisplay = document.getElementById("intersect");
 var errorLoader = document.getElementById("errorLoader");
 var errorButton = document.getElementById("errorButton");
-
-
+var interpolateTip = document.getElementById("interpolationTip"),
+    regressionTip = document.getElementById("regressionTip"),
+    errorTip = document.getElementById("errorTip");
+var interpolatePopup = document.getElementById("interpolatePopup"),
+    regressionPopup = document.getElementById("regressionPopup"),
+    errorPopup = document.getElementById("errorPopup");
 loader.hidden = true;
 regressionLoader.hidden = true;
 errorLoader.hidden = true;
@@ -166,11 +170,36 @@ errorButton.addEventListener("click", function(){
 
 });
 
-map.on('click', function(e){
-    var coord = e.latlng;
-    var lat = coord.lat;
-    var lng = coord.lng;
-    console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+// map.on('click', function(e){
+//     var coord = e.latlng;
+//     var lat = coord.lat;
+//     var lng = coord.lng;
+//     console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
+// });
+
+interpolateTip.addEventListener("mouseover",function(){
+    interpolatePopup.classList.add("show");
+});
+
+interpolateTip.addEventListener("mouseout",function(){
+    interpolatePopup.classList.remove("show");
+});
+
+
+regressionTip.addEventListener("mouseover",function(){
+    regressionPopup.classList.add("show");
+});
+
+regressionTip.addEventListener("mouseout",function(){
+    regressionPopup.classList.remove("show");
+});
+
+errorTip.addEventListener("mouseover",function(){
+    errorPopup.classList.add("show");
+});
+
+errorTip.addEventListener("mouseout",function(){
+    errorPopup.classList.remove("show");
 });
 // --------------------------------------------------------------------------
 

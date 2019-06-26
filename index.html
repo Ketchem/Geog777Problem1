@@ -17,7 +17,13 @@
                     <h2 id="titleText">Nitrates and Cancer</h2>
                 </div>
                 <div class="row">
-                    <h5>Interpolation <i id="interpolationTip" class="far fa-question-circle"></i></h5>
+                    <div class="popup">
+                        <h5>Interpolation <i id="interpolationTip" class="far fa-question-circle"></i></h5>
+                        <span class="popuptext" id="interpolatePopup">Spatial interpolation is the process of deriving values from existing measurements for areas where no measurement was taken.
+                            IDW Stands for inverse distance weighted and is a method of spatial interpolation where values are calculated based on weights that are proportional to the inverse of the distance between the measurements.
+                            The exponent and cell size variables control how the values are weighted and the output layer size respectively.</span>
+                    </div>
+
                     <label for="exponent">IDW Exponent</label>
                     <input type="number" value="1" id="exponent" min="1"/>
                     <label for="cellSize">Cell Size</label>
@@ -31,7 +37,14 @@
                 </div>
 
                 <div class="row">
-                    <h5>Regression <i id="regressionTip" class="far fa-question-circle"></i></h5>
+
+                    <div class="popup">
+                        <h5>Regression <i id="regressionTip" class="far fa-question-circle"></i></h5>
+                        <span class="popuptext" id="regressionPopup">A Linear regression is a method of determining how two variables relate to one another.
+                        The result is expressed as a line of best fit in the form y = mx + b. Based on the interpolated layer and the cancer rate, the slope
+                        and the Y-intercept of the line of best fit can be used to predict the cancer rate from the nitrate level. </span>
+                    </div>
+
                     <div class="controls">
                         <button disabled id="calculate" class="btn btn-primary btn-block">
                             <i id = "regressionLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Regression
@@ -47,7 +60,13 @@
                 </div>
 
                 <div class="row">
-                    <h5 id="errorTitle">Error <i id="errorTip" class="far fa-question-circle"></i></h5>
+
+                    <div class="popup">
+                        <h5 id="errorTitle">Error <i id="errorTip" class="far fa-question-circle"></i></h5>
+                        <span class="popuptext" id="errorPopup">The error level is a measure of residuals between the calculated cancer rate and the observed cancer rate.
+                        The higher the residual, the less accurate the regression line of best fit is for an area.</span>
+                    </div>
+
                     <div class="controls">
                         <button disabled id = "errorButton" class="buttonload btn btn-primary btn-block">
                             <i id = "errorLoader" class="fa fa-circle-o-notch fa-spin"></i> Calculate Error
