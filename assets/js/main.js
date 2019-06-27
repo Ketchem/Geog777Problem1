@@ -44,6 +44,9 @@ var censusTracts;
 var nitrateLevels;
 var errors;
 
+// Choropleth Legend
+var legend;
+
 // Map Layers
 var wellLayer = L.geoJSON(null, {
     pointToLayer: function (feature, latlng) {
@@ -56,9 +59,7 @@ var nitrateLayer = L.geoJSON(null, {style:styleInterpolation});
 var errorLayer = L.geoJSON(null, {style:styleError});
 // var cancerRates = L.geoJSON(null, {style:styleCancer});
 
-var censusLegend = L.control({position: 'bottomleft'});
-var interpolateLegend = L.control({position: 'bottomright'});
-var errorLegend = L.control({position: 'bottomright'});
+var legendControl = L.control({position: 'bottomleft'});
 
 // HTML Elements
 var exponentInput = document.getElementById("exponent");
@@ -79,6 +80,7 @@ var interpolateTip = document.getElementById("interpolationTip"),
 var interpolatePopup = document.getElementById("interpolatePopup"),
     regressionPopup = document.getElementById("regressionPopup"),
     errorPopup = document.getElementById("errorPopup");
+
 loader.hidden = true;
 regressionLoader.hidden = true;
 errorLoader.hidden = true;
@@ -138,6 +140,7 @@ interpolateButton.addEventListener("click", function(){
         success:function(){
             createInterpolation(wellPoints);
             nitrateLayer.addTo(map);
+            addInterpolateLegend();
             loader.hidden = true;
             calculateButton.disabled = false;
         }
@@ -168,6 +171,7 @@ errorButton.addEventListener("click", function(){
         success:function(){
             calculateError();
             errorLayer.addTo(map);
+            addErrorLegend();
             errorLoader.hidden = true;
         }
     });
@@ -439,23 +443,15 @@ function calculateError(){
 };
 
 function addCensusLegend(){
-    censusLegend.onAdd = function (map) {
+    legendControl.onAdd = function (map) {
 
         var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, .2, .4, .6, .8, 1],
+            grades = [0, .2, .4, .6, .8],
             labels = [];
 
-        // loop through our density intervals and generate a label with a colored square for each interval
-        // for (var i = 0; i < grades.length; i++) {
-        //     div.innerHTML +=
-                // '<i style="background:' + getTractsColor(grades[i]) + '"></i> ' +
-                // grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-
-        // loop through our density intervals and generate a label with a colored square for each interval
-        // first loop for colored legend boxes
         for (var i = 0; i < grades.length; i++) {
             div.innerHTML +=
-                '<span style="background:' + getTractsColor(grades[i]) + '"></span> ';
+                '<span style="background:' + getTractsColor(grades[i]+.1) + '"></span> ';
         }
 
         // a line break
@@ -465,12 +461,55 @@ function addCensusLegend(){
         for (var i = 0; i < grades.length; i++) {
             div.innerHTML +=
                 '<label>' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] : '+') + '</label>';
-
-
         }
-
         return div;
     };
 
-    censusLegend.addTo(map);
+    legendControl.addTo(map);
+    legend = document.getElementsByClassName('legend')[0];
+    console.log(legend);
+};
+
+function addInterpolateLegend(){
+    legend.innerHTML = "";
+
+    var grades = [0, 1, 3, 4, 5],
+        labels = [];
+
+    for (var i = 0; i < grades.length; i++) {
+        legend.innerHTML +=
+            '<span style="background:' + getInterpolationColor(grades[i]+.1) + '"></span> ';
+    }
+
+    // a line break
+    legend.innerHTML += '<br>';
+
+    // second loop for text
+    for (var i = 0; i < grades.length; i++) {
+        legend.innerHTML +=
+            '<label>' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] : '+') + '</label>';
+    }
+
+};
+
+function addErrorLegend(){
+    legend.innerHTML = "";
+
+
+    var grades = [0, 3, 6, 9, 12],
+        labels = [];
+
+    for (var i = 0; i < grades.length; i++) {
+        legend.innerHTML +=
+            '<span style="background:' + getErrorsColor(grades[i]+.1) + '"></span> ';
+    }
+
+    // a line break
+    legend.innerHTML += '<br>';
+
+    // second loop for text
+    for (var i = 0; i < grades.length; i++) {
+        legend.innerHTML +=
+            '<label>' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] : '+') + '</label>';
+    }
 };

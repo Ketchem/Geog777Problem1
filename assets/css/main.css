@@ -85,14 +85,14 @@ i{
     width: 50px;
     height: 18px;
     float: left;
-    opacity: 0.7;
+    opacity: 1;
     text-align: center;
     font-size: 80%;
     margin-bottom: 0;
 }
 
 .leaflet-left .leaflet-control {
-    margin-left: 10px;
+    margin-left: 3vw; /*3.375 = 25% (width of the panel) * 13.5% (margin of other buttons)*/
     margin-bottom: 0;
 }
 
@@ -141,7 +141,7 @@ i{
     top: 0;
     left: 0;
     z-index: 10;
-    margin-top: 3em;
+    margin-top: 2vh;
 }
 
 #\ panelBackground{
