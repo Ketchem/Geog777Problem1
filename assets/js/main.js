@@ -22,10 +22,11 @@ var map = L.map('map', {
 //     position:'topright'
 // }).addTo(map);
 
+
 // Layer Styles
 var wellSitesStyle = {
     radius: 4,
-    fillColor: "#ff7800",
+    fillColor: "#16CC38",
     color: "#000",
     weight: 1,
     opacity: 1,
@@ -55,6 +56,9 @@ var nitrateLayer = L.geoJSON(null, {style:styleInterpolation});
 var errorLayer = L.geoJSON(null, {style:styleError});
 // var cancerRates = L.geoJSON(null, {style:styleCancer});
 
+var censusLegend = L.control({position: 'bottomleft'});
+var interpolateLegend = L.control({position: 'bottomright'});
+var errorLegend = L.control({position: 'bottomright'});
 
 // HTML Elements
 var exponentInput = document.getElementById("exponent");
@@ -232,7 +236,7 @@ function createCensusLayer(response, status, jqXHRobject){
     censusLayer.addData(response)
     censusLayer.bringToBack(map);
 
-
+    addCensusLegend();
 };
 
 
@@ -284,12 +288,21 @@ function createInterpolation(wellPoints){
 };
 
 
+// function getInterpolationColor(d) {
+//     return d > 5 ? '#993404' :
+//         d > 4  ? '#d95f0e' :
+//             d > 3  ? '#fe9929' :
+//                 d > 1  ? '#fed98e' :
+//                     '#ffffd4';
+// }
+
+
 function getInterpolationColor(d) {
-    return d > 5 ? '#993404' :
-        d > 4  ? '#d95f0e' :
-            d > 3  ? '#fe9929' :
-                d > 1  ? '#fed98e' :
-                    '#ffffd4';
+    return d > 5 ? '#54278f' :
+        d > 4  ? '#756bb1' :
+            d > 3  ? '#9e9ac8' :
+                d > 1  ? '#cbc9e2' :
+                    '#f2f0f7';
 }
 
 function styleInterpolation(feature) {
@@ -299,16 +312,24 @@ function styleInterpolation(feature) {
         opacity: 1,
         color: 'white',
         dashArray: '3',
-        fillOpacity: 0.7
+        fillOpacity: 0.9
     };
 }
 
+// function getTractsColor(d) {
+//     return d > .8 ? '#993404' :
+//         d > .6  ? '#d95f0e' :
+//             d > .4  ? '#fe9929' :
+//                 d > .2  ? '#fed98e' :
+//                     '#ffffd4';
+// }
+
 function getTractsColor(d) {
-    return d > .8 ? '#993404' :
-        d > .6  ? '#d95f0e' :
-            d > .4  ? '#fe9929' :
-                d > .2  ? '#fed98e' :
-                    '#ffffd4';
+    return d > .8 ? '#006d2c' :
+        d > .6  ? '#2ca25f' :
+            d > .4  ? '#66c2a4' :
+                d > .2  ? '#b2e2e2' :
+                    '#edf8fb';
 }
 
 function styleTracts(feature) {
@@ -329,17 +350,27 @@ function styleError(feature){
         opacity: 1,
         color: 'white',
         dashArray: '3',
-        fillOpacity: 0.7
+        fillOpacity: 0.85
     };
 };
+//
+// function getErrorsColor(d){
+//     return d > 12 ? '#49006a' :
+//         d > 9  ? '#ae017e' :
+//             d > 6  ? '#f768a1' :
+//                 d > 3  ? '#fcc5c0' :
+//                     '#fff7f3';
+// }
+
 
 function getErrorsColor(d){
-    return d > 12 ? '#49006a' :
-        d > 9  ? '#ae017e' :
-            d > 6  ? '#f768a1' :
-                d > 3  ? '#fcc5c0' :
-                    '#fff7f3';
+    return d > 12 ? '#980043' :
+        d > 9  ? '#dd1c77' :
+            d > 6  ? '#df65b0' :
+                d > 3  ? '#d7b5d8' :
+                    '#f1eef6';
 }
+
 
 function calculateRegression(){
     // console.log("Calculate Regression Started");
@@ -405,4 +436,41 @@ function calculateError(){
     // console.log(max);
     errorLayer.addData(errors);
     console.log(errors);
+};
+
+function addCensusLegend(){
+    censusLegend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [0, .2, .4, .6, .8, 1],
+            labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        // for (var i = 0; i < grades.length; i++) {
+        //     div.innerHTML +=
+                // '<i style="background:' + getTractsColor(grades[i]) + '"></i> ' +
+                // grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        // first loop for colored legend boxes
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<span style="background:' + getTractsColor(grades[i]) + '"></span> ';
+        }
+
+        // a line break
+        div.innerHTML += '<br>';
+
+        // second loop for text
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<label>' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] : '+') + '</label>';
+
+
+        }
+
+        return div;
+    };
+
+    censusLegend.addTo(map);
 };

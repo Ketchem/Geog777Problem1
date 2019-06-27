@@ -59,14 +59,41 @@ i{
     border: none;
 }
 
+.btn:focus, .btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 .btn:hover{
-    background-color: #16CC38;
+    background-color: #09B39E;
     border: none;
 }
 
 .btn-primary:disabled{
-    background-color: #69FF84;
+    background-color: #17d6b3;
     border: none;
+}
+
+.legend {
+    line-height: 20px;
+    color: #fff;
+    width: 500px;
+}
+
+.legend span, .legend label {
+    display: block;
+    width: 50px;
+    height: 18px;
+    float: left;
+    opacity: 0.7;
+    text-align: center;
+    font-size: 80%;
+    margin-bottom: 0;
+}
+
+.leaflet-left .leaflet-control {
+    margin-left: 10px;
+    margin-bottom: 0;
 }
 
 @keyframes spin {
@@ -99,7 +126,7 @@ i{
 }
 
 #errorTitle{
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 #calculate, #errorButton{
@@ -206,3 +233,4 @@ i{
     from {opacity: 0;}
     to {opacity:1 ;}
 }
+
