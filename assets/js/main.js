@@ -368,10 +368,16 @@ function styleError(feature){
 
 
 function getErrorsColor(d){
-    return d > 12 ? '#980043' :
-        d > 9  ? '#dd1c77' :
-            d > 6  ? '#df65b0' :
-                d > 3  ? '#d7b5d8' :
+    // return d > 12 ? '#980043' :
+    //     d > 9  ? '#dd1c77' :
+    //         d > 6  ? '#df65b0' :
+    //             d > 3  ? '#d7b5d8' :
+    //                 '#f1eef6';
+
+    return d > .8 ? '#980043' :
+        d > .6  ? '#dd1c77' :
+            d > .4  ? '#df65b0' :
+                d > .2  ? '#d7b5d8' :
                     '#f1eef6';
 }
 
@@ -420,22 +426,30 @@ function calculateError(){
     var min = 0, max = 0;
     turf.featureEach(errors, function(currentFeature, featureindex) {
 
+        // var canRate = Number(currentFeature.properties.canrate);
+        // var nitrate = Number(currentFeature.properties.nitrate);
+        // var calcNitrate = Number((regressionEq.m * canRate) + regressionEq.b).toFixed(2)
+        //
+        // var error = calcNitrate - nitrate
+
         var canRate = Number(currentFeature.properties.canrate);
         var nitrate = Number(currentFeature.properties.nitrate);
-        var calcNitrate = Number((regressionEq.m * canRate) + regressionEq.b).toFixed(2)
+        var calcCancer = Number((regressionEq.m * nitrate) + regressionEq.b).toFixed(2)
 
-        var error = calcNitrate - nitrate
+        var error = canRate - calcCancer;
 
-        if (error < min) {
-            min = error;
-        }
-        if (error > max){
-            max = error;
-        }
+        //
+        //
+        // if (error < min) {
+        //     min = error;
+        // }
+        // if (error > max){
+        //     max = error;
+        // }
 
         currentFeature.properties.errorLevel = Math.abs(error);
     });
-
+    //
     // console.log(min);
     // console.log(max);
     errorLayer.addData(errors);
@@ -496,7 +510,7 @@ function addErrorLegend(){
     legend.innerHTML = "";
 
 
-    var grades = [0, 3, 6, 9, 12],
+    var grades = [0, .2, .4, .6, .8],
         labels = [];
 
     for (var i = 0; i < grades.length; i++) {
